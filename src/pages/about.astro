@@ -1,4 +1,6 @@
 ---
+import "../styles/global.css";
+
 const pageTitle = "About Me";
 
 const identity = {
@@ -27,7 +29,7 @@ const textCase = "uppercase";
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
-    <style define:vars={{skillColor, fontWeight, textCase}}>
+    <style define:vars={{ skillColor, fontWeight, textCase }}>
       h1 {
         color: purple;
         font-size: 4rem;
@@ -42,7 +44,7 @@ const textCase = "uppercase";
   <body>
     <a href="/">Home</a>
     <a href="/about/">About</a>
-    <a href="/Blog/">Blog</a>
+    <a href="/blog/">Blog</a>
     <h1>{pageTitle}</h1>
     <h2>... and my new Astro site!</h2>
 
