@@ -14,7 +14,7 @@ const happy = true;
 const finished = true;
 const goal = 2;
 
-const skillColor = "crimson";
+const skillColor = "var(--ctp-red)";
 const fontWeight = "bold";
 const textCase = "uppercase";
 ---
@@ -22,7 +22,7 @@ const textCase = "uppercase";
 <BaseLayout pageTitle={pageTitle}>
   <style is:global define:vars={{ skillColor, fontWeight, textCase }}>
     h1 {
-      color: purple;
+      color: var(--ctp-mauve);
       font-size: 4rem;
     }
     .skill {

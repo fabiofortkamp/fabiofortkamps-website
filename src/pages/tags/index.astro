@@ -10,31 +10,15 @@ const pageTitle = "Tag Index";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-  <style>
-    a {
-      color: #00539f;
-    }
-
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-    }
-
-    .tag {
-      margin: 0.25em;
-      border: dotted 1px #a1a1a1;
-      border-radius: 0.5em;
-      padding: 0.5em 1em;
-      font-size: 1.15em;
-      background-color: #f8fcfd;
-    }
-  </style>
-  <div class="tags">
+  <div class="flex flex-wrap gap-2 my-4">
     {
       tags.map((tag) => (
-        <p class="tag">
-          <a href={`/tags/${tag}`}>{tag}</a>
-        </p>
+        <a
+          href={`/tags/${tag}`}
+          class="px-3 py-1 rounded-full border border-ctp-mauve text-ctp-mauve text-sm font-medium hover:bg-ctp-mauve hover:text-ctp-base transition-colors"
+        >
+          {tag}
+        </a>
       ))
     }
   </div>
