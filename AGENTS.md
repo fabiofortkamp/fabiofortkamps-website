@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to coding agents when working with code in this repository.
 
 ## Development
 
@@ -36,7 +36,7 @@ Markdown blog posts use `MarkdownPostLayout.astro`, which wraps `BaseLayout` and
 
 ### Blog posts and routing
 
-Posts live in `src/pages/posts/*.md` as plain Markdown with frontmatter. Astro's file-based router turns each file into a route automatically. The `blog.astro` page and the tag pages collect all posts using `import.meta.glob("./posts/*.md", { eager: true })` — add a new `.md` file and it appears everywhere automatically.
+Posts live in `src/pages/posts/*.md` as plain Markdown with frontmatter. There are none yet, so the folder doesn't exist until the first Post. Astro's file-based router turns each file into a route automatically. The `blog.astro` page and the tag pages collect all posts using `import.meta.glob("./posts/*.md", { eager: true })` — add a new `.md` file and it appears everywhere automatically.
 
 Required frontmatter fields per post:
 ```
@@ -49,9 +49,9 @@ Tags flow from post frontmatter through two pages:
 - `src/pages/tags/index.astro` — collects all unique tags across all posts and renders links
 - `src/pages/tags/[tag].astro` — uses `getStaticPaths()` to generate one page per tag at build time, filtering posts by that tag
 
-### Interactive components (Preact)
+### Client-side scripts (no UI framework)
 
-The only interactive component is `Greeting.jsx` (Preact). It is used with `client:load` in `index.astro` so it hydrates immediately in the browser. Any future interactive components should also be Preact (`.jsx`) and must use a `client:*` directive to hydrate; without one, they render as static HTML only.
+The site has no UI framework integration. The only browser code is plain `<script>` tags: the inline theme script in `ThemeIcon.astro` and `src/scripts/menu.js`. If a future component needs framework-level interactivity, add an integration with `npx astro add` and hydrate the component with a `client:*` directive; without one, it renders as static HTML only.
 
 ### Dark mode
 

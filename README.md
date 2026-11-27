@@ -1,43 +1,53 @@
-# Astro Starter Kit: Minimal
+# Fábio Pinto Fortkamp's website
+
+Source for Fabio's personal website and blog, built with
+[Astro](https://astro.build) and Tailwind CSS as a static site.
+
+## Requirements
+
+- Node.js 22.12 or newer (see `engines` in `package.json`)
+- npm
+
+## Install
 
 ```sh
-npm create astro@latest -- --template minimal
+npm install
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Run the dev server
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```sh
+npm run dev
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+The site is served at http://localhost:4321 and reloads as you edit.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## Build
 
-Any static assets, like images, can be placed in the `public/` directory.
+```sh
+npm run build
+```
 
-## 🧞 Commands
+The static site is written to `dist/`.
 
-All commands are run from the root of the project, from a terminal:
+## Preview the build
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+```sh
+npm run build
+npm run preview
+```
 
-## 👀 Want to learn more?
+This serves `dist/` at http://localhost:4321, as it will be deployed.
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## Format
+
+```sh
+npx prettier --write .
+```
+
+## More docs
+
+- `spec.md`: what's built, the v1 launch plan and the changelog
+- `AGENTS.md`: code structure and notes for coding agents
+- `GLOSSARY.md`: the site's domain terms
+- `docs/adr/`: architecture decision records
