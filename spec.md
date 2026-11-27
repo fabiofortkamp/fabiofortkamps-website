@@ -7,7 +7,11 @@ Fabio's personal website and blog. Code structure and commands live in
 
 - Astro 7 static site, with no UI framework: the theme toggle and menu are
   plain `<script>` tags.
-- Tailwind CSS 4 (via `@tailwindcss/vite`) with a Catppuccin theme.
+- Tailwind CSS 4 (via `@tailwindcss/vite`), with the site's own colour
+  tokens in `src/styles/global.css`.
+- IBM Plex Sans and IBM Plex Mono, downloaded at build time by Astro's fonts
+  API and served from the site itself.
+- Vitest for unit tests (`npm test`).
 - `@astrojs/rss` for the feed.
 - Prettier with `prettier-plugin-astro` for formatting.
 - Site URL (`astro.config.mjs`): https://fabiofortkamp-website.netlify.app/
@@ -19,7 +23,7 @@ Fabio's personal website and blog. Code structure and commands live in
   are none yet.
 - Tags: an index of all tags, plus one generated page per tag.
 - RSS feed at `/rss.xml`.
-- Dark mode toggle, saved in `localStorage`.
+- Light and dark themes, with a toggle saved in `localStorage`.
 - Hamburger menu on narrow screens.
 
 ## v1 launch plan
@@ -84,6 +88,56 @@ proof of AI-assisted web development.
 
 Deferred ideas are collected in the "Later" issue.
 
+## Design
+
+Chosen on 2026-11-27 (issue #4) from three throwaway prototypes of the home
+page, kept on the `prototype/visual-direction` branch:
+
+- A, "Paper and figures": the page reads like a paper. The pitch is set as
+  an abstract, Featured Projects are figures with "Fig. 1." captions, other
+  projects sit in a ruled "Table 1", and Posts form a numbered reference
+  list. Newsreader serif, warm paper colours with a brick-red accent.
+- B, "Data sheet": an engineering spec sheet. Project cards with key/value
+  data labels and status lights, section rules with axis ticks, a dated
+  Post log. IBM Plex Sans and Mono, cool greys with a teal accent.
+- C, "Field lines": editorial. A large serif name over faint dipole
+  magnetic field lines, Featured Projects as a big-type index, a bar-magnet
+  mark. Instrument Serif and Sans, off-white with a magnet-blue accent.
+
+**Decision:** A's structure with B's palette and type.
+
+**Why A's structure:** its devices (captions, ruled tables, a reference
+list) come from Fabio's research background, so the signature touch is his
+own rather than decoration. They also carry over to the later pages:
+Outputs as captioned figures, the Projects list as a table, and the About
+page's publications as references. It was the most restrained of the three.
+
+**Why B's palette and type:** Fabio's pick over A's warm serif look. Plex is
+an engineering typeface, and the cool palette keeps the paper conventions
+from feeling old-fashioned.
+
+### Design rules
+
+- Colour tokens are defined once in `src/styles/global.css`: `:root` holds
+  the light theme and `html.dark` the dark one. Backgrounds: `page`,
+  `surface`. Text: `ink`, `muted`, `accent`, `ok` (for an Active status).
+  Lines: `rule` for hairlines, `ink` for the header and footer rules.
+  Tailwind exposes them as `bg-page`, `text-ink`, `border-rule` and so on.
+- Every text colour reaches WCAG AA (4.5:1) on both backgrounds in both
+  themes; `src/styles/palette.test.ts` fails the tests otherwise.
+- Type: IBM Plex Sans for text (`text-body`, 17px), IBM Plex Mono in small
+  uppercase (`mono-label`, `text-label`) for navigation, profile links and
+  labels such as "Fig. 1.". The type tokens sit in `global.css` beside the
+  colours.
+- Layout: one 46rem column. The header has the name on the left, the
+  navigation links and then the theme toggle on the right, and an ink rule
+  below. On narrow screens the links and the toggle sit behind the Menu
+  button. The footer has an ink rule above. Links in text are ink with an
+  accent underline; navigation and profile links are muted labels that turn
+  accent on hover.
+- Captioned figures, the table and the reference list arrive with the
+  pages in step 5.
+
 ## Agent setup
 
 - Shared house rules live in the home repo's `CLAUDE.md`. `AGENTS.md` holds
@@ -94,7 +148,9 @@ Deferred ideas are collected in the "Later" issue.
 
 ## Known gaps
 
-- No tests.
+- Tests cover only the palette's contrast. The rest of step 2 (Container
+  API render tests, `astro check`, CI and a test-gated Netlify build) is
+  still to come in issue #2.
 - No Posts, so the blog page, the tag index and the RSS feed are empty and
   `MarkdownPostLayout.astro` is unused until the first Post.
 - The home page has no content below its heading until the pitch is written.
@@ -127,3 +183,16 @@ Deferred ideas are collected in the "Later" issue.
   dependencies, and its JSX settings in `tsconfig.json`. Replaced the
   starter `README.md` with install, dev, build and preview instructions, and
   fixed the `AGENTS.md` heading.
+- 2026-11-27: Chose and built the visual direction (step 4, issue #4); see
+  "Design" above. Built three home-page prototypes, kept on the
+  `prototype/visual-direction` branch. Replaced the Catppuccin theme with
+  the site's own colour tokens for light and dark, and added IBM Plex Sans
+  and Mono through Astro's fonts API, with colour and type tokens in
+  `global.css`. Restyled the base layout, header, footer, menu and theme
+  toggle: the header now shows the name and marks the current page, the
+  theme toggle follows the links (inside the menu on narrow screens), and
+  the saved theme is applied in `<head>` before the first paint. Added
+  Vitest (`npm test`) with unit tests for the WCAG contrast maths
+  (`contrast.ts`) and the token reader (`theme-colors.ts`), and a test that
+  checks the palette in `src/styles/global.css` reaches AA in both
+  themes.

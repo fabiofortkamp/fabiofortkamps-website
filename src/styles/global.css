@@ -1,163 +1,121 @@
 @import "tailwindcss";
 
-/* Catppuccin Latte – light mode */
+/* Colour tokens: light by default, dark when <html> has the `dark` class.
+   Text colours (ink, muted, accent, ok) must reach WCAG AA on both
+   backgrounds (page, surface) in both themes: palette.test.ts checks it. */
 :root {
-  --ctp-rosewater: #dc8a78;
-  --ctp-flamingo: #dd7878;
-  --ctp-pink: #ea76cb;
-  --ctp-mauve: #8839ef;
-  --ctp-red: #d20f39;
-  --ctp-maroon: #e64553;
-  --ctp-peach: #fe640b;
-  --ctp-yellow: #df8e1d;
-  --ctp-green: #40a02b;
-  --ctp-teal: #179299;
-  --ctp-sky: #04a5e5;
-  --ctp-sapphire: #209fb5;
-  --ctp-blue: #1e66f5;
-  --ctp-lavender: #7287fd;
-  --ctp-text: #4c4f69;
-  --ctp-subtext1: #5c5f77;
-  --ctp-subtext0: #6c6f85;
-  --ctp-overlay2: #7c7f93;
-  --ctp-overlay1: #8c8fa1;
-  --ctp-overlay0: #9ca0b0;
-  --ctp-surface2: #acb0be;
-  --ctp-surface1: #bcc0cc;
-  --ctp-surface0: #ccd0da;
-  --ctp-base: #eff1f5;
-  --ctp-mantle: #e6e9ef;
-  --ctp-crust: #dce0e8;
+  color-scheme: light;
+  --page: #f3f5f6;
+  --surface: #ffffff;
+  --ink: #14202b;
+  --muted: #506070;
+  --accent: #006b84;
+  --ok: #1b7046;
+  --rule: #d3dbe1;
 }
 
-/* Catppuccin Mocha – dark mode */
-.dark {
-  --ctp-rosewater: #f5e0dc;
-  --ctp-flamingo: #f2cdcd;
-  --ctp-pink: #f5c2e7;
-  --ctp-mauve: #cba6f7;
-  --ctp-red: #f38ba8;
-  --ctp-maroon: #eba0ac;
-  --ctp-peach: #fab387;
-  --ctp-yellow: #f9e2af;
-  --ctp-green: #a6e3a1;
-  --ctp-teal: #94e2d5;
-  --ctp-sky: #89dceb;
-  --ctp-sapphire: #74c7ec;
-  --ctp-blue: #89b4fa;
-  --ctp-lavender: #b4befe;
-  --ctp-text: #cdd6f4;
-  --ctp-subtext1: #bac2de;
-  --ctp-subtext0: #a6adc8;
-  --ctp-overlay2: #9399b2;
-  --ctp-overlay1: #7f849c;
-  --ctp-overlay0: #6c7086;
-  --ctp-surface2: #585b70;
-  --ctp-surface1: #45475a;
-  --ctp-surface0: #313244;
-  --ctp-base: #1e1e2e;
-  --ctp-mantle: #181825;
-  --ctp-crust: #11111b;
+html.dark {
+  color-scheme: dark;
+  --page: #0e141a;
+  --surface: #151d25;
+  --ink: #dbe4ea;
+  --muted: #8d9eab;
+  --accent: #4cc9d8;
+  --ok: #5fd39a;
+  --rule: #26323d;
 }
 
-/* Expose Catppuccin as Tailwind color utilities via inline CSS vars.
-   bg-ctp-base, text-ctp-mauve, etc. automatically reflect the active flavor. */
+/* Expose the colour tokens as Tailwind utilities (bg-page, text-ink,
+   border-rule…) and the self-hosted IBM Plex fonts (see astro.config.mjs)
+   as font-sans and font-mono. */
 @theme inline {
-  --color-ctp-rosewater: var(--ctp-rosewater);
-  --color-ctp-flamingo: var(--ctp-flamingo);
-  --color-ctp-pink: var(--ctp-pink);
-  --color-ctp-mauve: var(--ctp-mauve);
-  --color-ctp-red: var(--ctp-red);
-  --color-ctp-maroon: var(--ctp-maroon);
-  --color-ctp-peach: var(--ctp-peach);
-  --color-ctp-yellow: var(--ctp-yellow);
-  --color-ctp-green: var(--ctp-green);
-  --color-ctp-teal: var(--ctp-teal);
-  --color-ctp-sky: var(--ctp-sky);
-  --color-ctp-sapphire: var(--ctp-sapphire);
-  --color-ctp-blue: var(--ctp-blue);
-  --color-ctp-lavender: var(--ctp-lavender);
-  --color-ctp-text: var(--ctp-text);
-  --color-ctp-subtext1: var(--ctp-subtext1);
-  --color-ctp-subtext0: var(--ctp-subtext0);
-  --color-ctp-overlay2: var(--ctp-overlay2);
-  --color-ctp-overlay1: var(--ctp-overlay1);
-  --color-ctp-overlay0: var(--ctp-overlay0);
-  --color-ctp-surface2: var(--ctp-surface2);
-  --color-ctp-surface1: var(--ctp-surface1);
-  --color-ctp-surface0: var(--ctp-surface0);
-  --color-ctp-base: var(--ctp-base);
-  --color-ctp-mantle: var(--ctp-mantle);
-  --color-ctp-crust: var(--ctp-crust);
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-ok: var(--ok);
+  --color-rule: var(--rule);
+  --font-sans: var(--font-plex-sans);
+  --font-mono: var(--font-plex-mono);
+}
+
+/* Type scale tokens beyond Tailwind's defaults: text-body, text-label. */
+@theme {
+  --text-body: 1.0625rem;
+  --text-label: 0.85rem;
+  --tracking-label: 0.06em;
 }
 
 @layer base {
   a {
-    color: var(--ctp-blue);
-    text-decoration: none;
-  }
-  a:hover,
-  a:focus {
-    color: var(--ctp-lavender);
+    color: var(--ink);
     text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+  }
+  a:hover {
+    color: var(--accent);
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
   }
 }
 
-/* Nav kept as plain CSS — hamburger toggle depends on .menu and .nav-links class names */
-.menu {
-  background-color: var(--ctp-mauve);
-  border: none;
-  color: var(--ctp-base);
-  font-size: 1.2rem;
-  font-weight: bold;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
+/* Small uppercase mono labels: navigation, profile links, captions. */
+@utility mono-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
 }
 
+/* Header navigation: the links, then the theme toggle. On narrow screens it
+   is hidden until the menu button opens it. The .menu and .nav-links class
+   names are what the hamburger toggle (src/scripts/menu.js) relies on. */
 .nav-links {
-  width: 100%;
   display: none;
-  margin: 0;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.nav-links ul {
+  display: flex;
+  flex-direction: column;
 }
 
 .nav-links a {
-  display: block;
-  text-align: center;
-  padding: 10px 0;
-  text-decoration: none;
-  font-size: 1.2rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  color: var(--ctp-mauve);
+  display: inline-block;
+  padding: 0.4rem 0;
 }
 
-.nav-links a:hover,
-.nav-links a:focus {
-  background-color: var(--ctp-surface0);
-  color: var(--ctp-text);
-  text-decoration: none;
+.nav-links a[aria-current="page"] {
+  color: var(--ink);
+  box-shadow: inset 0 -1px var(--accent);
 }
 
 :has(.menu[aria-expanded="true"]) .nav-links {
-  display: unset;
+  display: flex;
 }
 
-@media screen and (min-width: 636px) {
-  .nav-links {
-    margin-left: 5em;
-    display: block;
-    position: static;
-    width: auto;
-    background: none;
-  }
-
-  .nav-links a {
-    display: inline-block;
-    padding: 15px 20px;
-  }
-
+@media screen and (min-width: 40rem) {
   .menu {
     display: none;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.25rem;
+    width: auto;
+  }
+
+  .nav-links ul {
+    flex-direction: row;
+    gap: 1.25rem;
   }
 }

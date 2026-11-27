@@ -24,7 +24,13 @@ Format code (Prettier with Astro plugin):
 npx prettier --write .
 ```
 
-There are no tests in this project.
+Run the tests (Vitest):
+
+```
+npm test
+```
+
+So far the only tests are for the colour palette's contrast, in `src/styles/`. The rest of the test setup (Container API render tests, `astro check`, CI) comes with issue #2.
 
 ## Architecture
 
@@ -51,15 +57,23 @@ Tags flow from post frontmatter through two pages:
 
 ### Client-side scripts (no UI framework)
 
-The site has no UI framework integration. The only browser code is plain `<script>` tags: the inline theme script in `ThemeIcon.astro` and `src/scripts/menu.js`. If a future component needs framework-level interactivity, add an integration with `npx astro add` and hydrate the component with a `client:*` directive; without one, it renders as static HTML only.
+The site has no UI framework integration. The only browser code is plain `<script>` tags: the inline theme script in the `<head>` of `BaseLayout.astro`, the toggle's click handler in `ThemeIcon.astro`, and `src/scripts/menu.js`. If a future component needs framework-level interactivity, add an integration with `npx astro add` and hydrate the component with a `client:*` directive; without one, it renders as static HTML only.
+
+### Styling: colour and type tokens
+
+The design rules are in `spec.md` → "Design". Colours are tokens defined once in `global.css`: `:root` holds the light theme and `html.dark` the dark one. Tailwind exposes them through `@theme inline` as `bg-page`, `bg-surface`, `text-ink`, `text-muted`, `text-accent`, `text-ok` and `border-rule`; scoped `<style>` blocks use `var(--ink)` and the like. Use the tokens, never raw colours, so both themes keep working without dark-mode overrides.
+
+`src/styles/palette.test.ts` reads `global.css` (through `theme-colors.ts`) and checks that every text colour (`ink`, `muted`, `accent`, `ok`) reaches WCAG AA on both backgrounds (`page`, `surface`) in both themes. If you add a text or background token, add it to that test.
+
+Fonts are IBM Plex Sans (`font-sans`, the default) and IBM Plex Mono (`font-mono`), configured in `astro.config.mjs` and loaded with `<Font>` in `BaseLayout.astro`. The type tokens `text-body` and `text-label` sit in `global.css` beside the colours, and the `mono-label` utility is the small uppercase mono style for navigation, profile links and captions.
 
 ### Dark mode
 
-Dark mode is toggled by `ThemeIcon.astro` via a class on `<html>`: `document.documentElement.classList.toggle("dark")`. The theme is persisted in `localStorage`. CSS dark-mode overrides are written in `global.css` under the `html.dark` and `.dark *` selectors. Component-scoped dark styles use `:global(.dark)`.
+The theme is a `dark` class on `<html>`. An inline script in the `<head>` of `BaseLayout.astro` applies the saved theme from `localStorage` (or the system preference) before the first paint. `ThemeIcon.astro` toggles the class on click and saves the choice.
 
 ### Navigation (hamburger menu)
 
-`Menu.astro` renders a `<button aria-expanded="false">` that is hidden on wide screens. `src/scripts/menu.js` toggles `aria-expanded` on click. The CSS in `global.css` uses `:has(.menu[aria-expanded="true"]) .nav-links` to show/hide the nav links — no JavaScript class toggling needed. The script is imported in `BaseLayout.astro` via `<script>` (bundled by Vite).
+`Menu.astro` renders a `<button aria-expanded="false">` that is hidden on wide screens. `Navigation.astro` holds the links, marks the current one with `aria-current="page"`, and renders the theme toggle that `Header.astro` passes through its slot, so the toggle follows the links in both the visual and the keyboard order. `src/scripts/menu.js` toggles `aria-expanded` on click. The CSS in `global.css` uses `:has(.menu[aria-expanded="true"]) .nav-links` to show/hide the nav links — no JavaScript class toggling needed. The script is imported in `BaseLayout.astro` via `<script>` (bundled by Vite).
 
 ### RSS feed
 
