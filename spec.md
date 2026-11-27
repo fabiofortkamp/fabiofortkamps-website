@@ -5,7 +5,8 @@ Fabio's personal website and blog. Code structure and commands live in
 
 ## Stack
 
-- Astro 7 static site, with Preact for interactive components.
+- Astro 7 static site, with no UI framework: the theme toggle and menu are
+  plain `<script>` tags.
 - Tailwind CSS 4 (via `@tailwindcss/vite`) with a Catppuccin theme.
 - `@astrojs/rss` for the feed.
 - Prettier with `prettier-plugin-astro` for formatting.
@@ -13,10 +14,9 @@ Fabio's personal website and blog. Code structure and commands live in
 
 ## Features
 
-- Pages: home (with a random greeting, the only Preact component), about,
-  blog.
-- Blog: Markdown posts in `src/pages/posts/` (four so far), listed on the
-  blog page.
+- Pages: home (a heading only, for now), about, blog.
+- Blog: Markdown posts in `src/pages/posts/`, listed on the blog page. There
+  are none yet.
 - Tags: an index of all tags, plus one generated page per tag.
 - RSS feed at `/rss.xml`.
 - Dark mode toggle, saved in `localStorage`.
@@ -95,8 +95,9 @@ Deferred ideas are collected in the "Later" issue.
 ## Known gaps
 
 - No tests.
-- `README.md` is still the Astro starter text.
-- `AGENTS.md` still opens with a `# CLAUDE.md` heading.
+- No Posts, so the blog page, the tag index and the RSS feed are empty and
+  `MarkdownPostLayout.astro` is unused until the first Post.
+- The home page has no content below its heading until the pitch is written.
 
 ## Changelog
 
@@ -117,3 +118,12 @@ Deferred ideas are collected in the "Later" issue.
   above, `GLOSSARY.md` and ADR 0001. Collapsed all branches into `main` and
   deleted `develop`, `feature/styling`, `home-repo/move-shared-rules` and
   `agents/skills-setup`.
+- 2026-11-27: Cleaned out the Astro tutorial leftovers (step 1, issue #1).
+  Deleted the four "Astro Learner" posts and `Greeting.jsx`; removed the
+  tutorial text and flags from the About page, the placeholder headings
+  from the home page, the tutorial title and intro from the blog page, and
+  the tutorial title and description from the RSS feed.
+  Removed Preact: the integration, the `preact` and `@astrojs/preact`
+  dependencies, and its JSX settings in `tsconfig.json`. Replaced the
+  starter `README.md` with install, dev, build and preview instructions, and
+  fixed the `AGENTS.md` heading.

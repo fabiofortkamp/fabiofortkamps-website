@@ -10,10 +10,6 @@ const identity = {
 
 const skills = ["Python", "MATLAB", "Julia", "Astro", "Ruby", "R"];
 
-const happy = true;
-const finished = true;
-const goal = 2;
-
 const skillColor = "var(--ctp-red)";
 const fontWeight = "bold";
 const textCase = "uppercase";
@@ -32,17 +28,6 @@ const textCase = "uppercase";
     }
   </style>
 
-  <h2>... and my new Astro site!</h2>
-
-  <p>
-    I am working through Astro's introductory tutorial. This is the second page
-    on my website, and it's the first one I built myself!
-  </p>
-
-  <p>
-    This site will update as I complete more of the tutorial, so keep checking
-    back and see how my journey is going!
-  </p>
   <p>Here are a few facts about me:</p>
   <ul>
     <li>My name is {identity.firstName}.</li>
@@ -61,15 +46,4 @@ const textCase = "uppercase";
   <ul>
     {skills.map((skill) => <li class="skill">{skill}</li>)}
   </ul>
-  {happy && <p>I am happy to be learning Astro!</p>}
-
-  {finished && <p>I finished this tutorial!</p>}
-
-  {
-    goal === 2 ? (
-      <p>My goal is to finish in 3 days.</p>
-    ) : (
-      <p>My goal is not 3 days, but to finish in {goal} days.</p>
-    )
-  }
 </BaseLayout>
