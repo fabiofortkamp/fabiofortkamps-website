@@ -1,0 +1,90 @@
+/* PROTOTYPE (issue #4): colour and type tokens for the three variants.
+   Each variant owns its palette; only the active one applies. */
+@import "tailwindcss";
+
+html[data-variant="A"] {
+  --bg: #f7f4ee;
+  --fg: #1d1b18;
+  --muted: #5e584f;
+  --accent: #9b2c1f;
+  --rule: #d8d0c2;
+  --plate: #efeae0;
+  --font-body: var(--font-newsreader);
+}
+html.dark[data-variant="A"] {
+  --bg: #17171a;
+  --fg: #ebe6dc;
+  --muted: #a59e92;
+  --accent: #f0907a;
+  --rule: #38383d;
+  --plate: #1f1f23;
+}
+
+html[data-variant="B"] {
+  --bg: #f3f5f6;
+  --surface: #ffffff;
+  --fg: #14202b;
+  --muted: #506070;
+  --accent: #006b84;
+  --ok: #1b7046;
+  --rule: #d3dbe1;
+  --font-body: var(--font-plex-sans);
+  --font-mono: var(--font-plex-mono);
+}
+html.dark[data-variant="B"] {
+  --bg: #0e141a;
+  --surface: #151d25;
+  --fg: #dbe4ea;
+  --muted: #8d9eab;
+  --accent: #4cc9d8;
+  --ok: #5fd39a;
+  --rule: #26323d;
+}
+
+html[data-variant="C"] {
+  --bg: #fbfbf8;
+  --fg: #121212;
+  --muted: #5a5a5a;
+  --accent: #2546d0;
+  --pole: #c8372b;
+  --rule: #e2e2dc;
+  --field: rgb(37 70 208 / 0.16);
+  --font-body: var(--font-instrument-sans);
+  --font-display: var(--font-instrument-serif);
+}
+html.dark[data-variant="C"] {
+  --bg: #0d0f14;
+  --fg: #ecebe6;
+  --muted: #9c9da3;
+  --accent: #93a5ff;
+  --pole: #ff7a6b;
+  --rule: #23262e;
+  --field: rgb(147 165 255 / 0.16);
+}
+
+html {
+  color-scheme: light;
+}
+html.dark {
+  color-scheme: dark;
+}
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-proto] {
+  display: none;
+}
+html[data-variant="A"] [data-proto="A"],
+html[data-variant="B"] [data-proto="B"],
+html[data-variant="C"] [data-proto="C"] {
+  display: block;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}

@@ -1,0 +1,507 @@
+---
+// PROTOTYPE (issue #4), variant B: "Data sheet". An engineering spec-sheet
+// look: a compact top bar, Featured Projects as cards with key/value data
+// labels, section rules with axis ticks, Posts as a dated log.
+import {
+  name,
+  tagline,
+  pitch,
+  featured,
+  more,
+  posts,
+  nav,
+  profiles,
+  years,
+} from "./content";
+---
+
+<div class="page">
+  <header class="bar">
+    <a class="mark" href="/"><span class="dot" aria-hidden="true"></span>{name}</a>
+    <div class="controls">
+      <button class="theme" data-theme-toggle aria-label="Switch theme">
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"
+          ><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor"
+          ></circle><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"
+          ></path></svg
+        >
+      </button>
+      <button
+        class="menu"
+        data-menu-toggle
+        aria-expanded="false"
+        aria-controls="b-nav">menu</button
+      >
+    </div>
+    <nav id="b-nav" class="nav" aria-label="Main">
+      <ul>
+        {
+          nav.map((n, i) => (
+            <li>
+              <a href={n.href} aria-current={i === 0 ? "page" : undefined}>
+                {n.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="kicker">{tagline} · Denmark</p>
+      <h1>{name}</h1>
+      <p class="pitch">{pitch}</p>
+    </section>
+
+    <section aria-labelledby="b-featured">
+      <h2 class="axis" id="b-featured">
+        <span class="idx">01</span> Featured projects
+      </h2>
+      <div class="grid">
+        {
+          featured.map((p) => (
+            <article class="card">
+              <div class="card-head">
+                <h3>
+                  <a href={`/projects/${p.slug}/`}>{p.title}</a>
+                </h3>
+                <span class:list={["status", p.status]}>
+                  <span class="led" aria-hidden="true" />
+                  {p.status}
+                </span>
+              </div>
+              <p class="summary">{p.summary}</p>
+              <dl class="spec">
+                <dt>role</dt>
+                <dd>{p.role}</dd>
+                <dt>span</dt>
+                <dd>{years(p)}</dd>
+                <dt>stack</dt>
+                <dd>{p.stack.join(" · ")}</dd>
+              </dl>
+            </article>
+          ))
+        }
+      </div>
+
+      <table class="list">
+        <caption class="sub">more projects</caption>
+        <tbody>
+          {
+            more.map((p) => (
+              <tr>
+                <th scope="row">
+                  <a href={`/projects/${p.slug}/`}>{p.title}</a>
+                </th>
+                <td class="role">{p.role}</td>
+                <td class="span">{years(p)}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </section>
+
+    <section aria-labelledby="b-writing">
+      <h2 class="axis" id="b-writing">
+        <span class="idx">02</span> Latest writing
+      </h2>
+      <ul class="log">
+        {
+          posts.map((post) => (
+            <li>
+              <time datetime={post.date}>{post.date}</time>
+              <div>
+                <a href="/writing/">{post.title}</a>
+                {post.series && (
+                  <span class="series">
+                    {post.series.title} · part {post.series.part}
+                  </span>
+                )}
+                <p>{post.description}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <dl class="spec">
+      <dt>email</dt>
+      <dd><a href="#email">fabio@…</a></dd>
+      {
+        profiles.map((p) => (
+          <>
+            <dt>{p.label.toLowerCase()}</dt>
+            <dd>
+              <a href={p.href}>{p.href.replace(/^https:\/\/(www\.)?/, "")}</a>
+            </dd>
+          </>
+        ))
+      }
+    </dl>
+    <p class="colophon"><a href="/colophon/">colophon</a></p>
+  </footer>
+</div>
+
+<style>
+  .page {
+    max-width: 46rem;
+    margin: 0 auto;
+    padding: 0 1.25rem 6rem;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+  a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .kicker,
+  .menu,
+  .nav a,
+  .idx,
+  .status,
+  .spec,
+  .sub,
+  .log time,
+  .series,
+  .span,
+  .colophon {
+    font-family: var(--font-mono);
+  }
+
+  /* Bar */
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-weight: 600;
+    color: var(--fg);
+    letter-spacing: -0.01em;
+  }
+  .dot {
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+  .controls {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .menu,
+  .theme {
+    font-size: 0.85rem;
+    color: var(--muted);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 0.3rem 0.6rem;
+    cursor: pointer;
+    background: var(--surface);
+  }
+  .theme {
+    display: grid;
+    place-items: center;
+    padding: 0.4rem;
+  }
+  .nav {
+    display: none;
+    width: 100%;
+  }
+  .bar:has([aria-expanded="true"]) .nav {
+    display: block;
+  }
+  .nav ul {
+    display: flex;
+    flex-direction: column;
+  }
+  .nav a {
+    display: block;
+    padding: 0.4rem 0;
+    font-size: 0.9rem;
+    text-transform: lowercase;
+    color: var(--muted);
+  }
+  .nav a[aria-current="page"] {
+    color: var(--fg);
+  }
+  .nav a[aria-current="page"]::before {
+    content: "> ";
+    color: var(--accent);
+  }
+  @media (min-width: 40rem) {
+    .bar {
+      flex-wrap: nowrap;
+    }
+    .menu {
+      display: none;
+    }
+    .nav {
+      display: block;
+      width: auto;
+      margin-left: auto;
+    }
+    .nav ul {
+      flex-direction: row;
+      gap: 1.25rem;
+    }
+    .controls {
+      order: 3;
+    }
+  }
+
+  /* Hero */
+  .hero {
+    padding: 3.5rem 0 3rem;
+  }
+  .kicker {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .kicker::before {
+    content: "// ";
+    color: var(--accent);
+  }
+  h1 {
+    margin: 0.5rem 0 1rem;
+    font-size: clamp(2.3rem, 7vw, 3.4rem);
+    line-height: 1.05;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+  }
+  .pitch {
+    max-width: 36rem;
+    font-size: 1.2rem;
+    color: var(--fg);
+    text-wrap: pretty;
+  }
+
+  /* Axis-tick section rules */
+  .axis {
+    position: relative;
+    display: flex;
+    gap: 0.75rem;
+    align-items: baseline;
+    margin: 0 0 1.25rem;
+    padding-bottom: 0.6rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .axis::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 6px;
+    border-bottom: 1px solid var(--fg);
+    background: repeating-linear-gradient(
+      to right,
+      var(--muted) 0 1px,
+      transparent 1px 2.5rem
+    );
+    background-size: 100% 6px;
+    opacity: 0.8;
+  }
+  .idx {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  section + section {
+    margin-top: 3.5rem;
+  }
+
+  /* Cards */
+  .grid {
+    display: grid;
+    gap: 1rem;
+  }
+  @media (min-width: 40rem) {
+    .grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1rem 1.1rem 1.1rem;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+  }
+  .card:hover {
+    border-color: var(--accent);
+  }
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  h3 a {
+    color: var(--fg);
+  }
+  .summary {
+    font-size: 0.98rem;
+    color: var(--fg);
+    flex: 1;
+  }
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .led {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+  }
+  .status.active {
+    color: var(--ok);
+  }
+  .status.active .led {
+    background: currentColor;
+  }
+  .spec {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.15rem 0.9rem;
+    font-size: 0.78rem;
+    padding-top: 0.6rem;
+    border-top: 1px dashed var(--rule);
+  }
+  .spec dt {
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .spec dd {
+    color: var(--fg);
+  }
+
+  /* More projects */
+  .list {
+    width: 100%;
+    margin-top: 1.75rem;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+  .sub {
+    caption-side: top;
+    text-align: left;
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding-bottom: 0.4rem;
+  }
+  .list tr {
+    border-top: 1px solid var(--rule);
+  }
+  .list tr:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+  .list th,
+  .list td {
+    padding: 0.45rem 0.75rem 0.45rem 0;
+    text-align: left;
+    font-weight: 400;
+    vertical-align: baseline;
+  }
+  .list th a {
+    font-weight: 500;
+  }
+  .role {
+    color: var(--muted);
+  }
+  .span {
+    text-align: right !important;
+    padding-right: 0 !important;
+    font-size: 0.8rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  @media (max-width: 30rem) {
+    .role {
+      display: none;
+    }
+  }
+
+  /* Log */
+  .log li {
+    display: grid;
+    gap: 0.25rem 1.25rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  @media (min-width: 40rem) {
+    .log li {
+      grid-template-columns: 7rem 1fr;
+    }
+  }
+  .log time {
+    font-size: 0.85rem;
+    color: var(--muted);
+    padding-top: 0.15rem;
+  }
+  .log a {
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+  .series {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .log p {
+    margin-top: 0.25rem;
+    color: var(--muted);
+  }
+
+  /* Footer */
+  .foot {
+    margin-top: 5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--fg);
+  }
+  .foot .spec {
+    border: 0;
+    padding: 0;
+    font-size: 0.85rem;
+    gap: 0.3rem 1.5rem;
+  }
+  .colophon {
+    margin-top: 1.25rem;
+    font-size: 0.85rem;
+  }
+</style>

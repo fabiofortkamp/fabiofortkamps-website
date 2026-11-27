@@ -1,13 +1,73 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import Greeting from "../components/Greeting";
-const pageTitle = "Home Page";
+// PROTOTYPE (issue #4): three visual directions for the home page on the
+// existing `/` route, switchable with ?variant=A|B|C and the floating bar.
+// Throwaway: lives only on the prototype/visual-direction branch.
+import { Font } from "astro:assets";
+import "../components/prototype-home/prototype.css";
+import PrototypeSwitcher from "../components/prototype-home/PrototypeSwitcher.astro";
+import VariantA from "../components/prototype-home/VariantA.astro";
+import VariantB from "../components/prototype-home/VariantB.astro";
+import VariantC from "../components/prototype-home/VariantC.astro";
+
+const variants = [
+  { key: "A", name: "Paper and figures" },
+  { key: "B", name: "Data sheet" },
+  { key: "C", name: "Field lines" },
+];
 ---
 
-<BaseLayout pageTitle={pageTitle}>
-  <h2>My awesome blog subtitle</h2>
-  <Greeting
-    client:load
-    messages={["Hello", "Bonjour", "Hola", "Ciao", "Hej", "Hallo"]}
-  />
-</BaseLayout>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Fábio P. Fortkamp (prototype)</title>
+    <Font cssVariable="--font-newsreader" />
+    <Font cssVariable="--font-plex-sans" />
+    <Font cssVariable="--font-plex-mono" />
+    <Font cssVariable="--font-instrument-serif" />
+    <Font cssVariable="--font-instrument-sans" />
+    <script is:inline>
+      (() => {
+        const html = document.documentElement;
+        const v = new URLSearchParams(location.search)
+          .get("variant")
+          ?.toUpperCase();
+        html.dataset.variant = ["A", "B", "C"].includes(v) ? v : "A";
+        let saved = null;
+        try {
+          saved = localStorage.getItem("theme");
+        } catch {}
+        const dark =
+          saved === "dark" ||
+          (saved !== "light" &&
+            matchMedia("(prefers-color-scheme: dark)").matches);
+        html.classList.toggle("dark", dark);
+      })();
+    </script>
+  </head>
+  <body>
+    <div data-proto="A"><VariantA /></div>
+    <div data-proto="B"><VariantB /></div>
+    <div data-proto="C"><VariantC /></div>
+    <PrototypeSwitcher variants={variants} />
+    <script>
+      // Shared behaviour: theme toggle (saved in localStorage) and the
+      // mobile menu (aria-expanded drives the CSS).
+      document.querySelectorAll("[data-theme-toggle]").forEach((b) =>
+        b.addEventListener("click", () => {
+          const dark = document.documentElement.classList.toggle("dark");
+          try {
+            localStorage.setItem("theme", dark ? "dark" : "light");
+          } catch {}
+        }),
+      );
+      document.querySelectorAll("[data-menu-toggle]").forEach((b) =>
+        b.addEventListener("click", () => {
+          const open = b.getAttribute("aria-expanded") === "true";
+          b.setAttribute("aria-expanded", String(!open));
+        }),
+      );
+    </script>
+  </body>
+</html>

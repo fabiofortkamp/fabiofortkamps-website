@@ -1,0 +1,93 @@
+---
+// PROTOTYPE (issue #4): floating bar that cycles ?variant= between the
+// home-page directions. Rendered only in `astro dev`.
+interface Props {
+  variants: { key: string; name: string }[];
+}
+const { variants } = Astro.props;
+---
+
+{
+  import.meta.env.DEV && (
+    <div class="switcher" data-variants={JSON.stringify(variants)}>
+      <button type="button" data-step="-1" aria-label="Previous variant">
+        ←
+      </button>
+      <span class="label" aria-live="polite" />
+      <button type="button" data-step="1" aria-label="Next variant">
+        →
+      </button>
+    </div>
+  )
+}
+
+<style>
+  .switcher {
+    position: fixed;
+    bottom: 4.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.5rem;
+    border-radius: 999px;
+    background: #ff2e88;
+    color: #fff;
+    font: 600 0.85rem/1 system-ui, sans-serif;
+    box-shadow: 0 6px 24px rgb(0 0 0 / 0.35);
+    white-space: nowrap;
+  }
+  button {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.2);
+    color: inherit;
+    cursor: pointer;
+  }
+  button:hover {
+    background: rgb(255 255 255 / 0.35);
+  }
+  .label {
+    min-width: 14rem;
+    text-align: center;
+  }
+</style>
+
+<script>
+  const bar = document.querySelector<HTMLElement>(".switcher");
+  if (bar) {
+    const variants: { key: string; name: string }[] = JSON.parse(
+      bar.dataset.variants ?? "[]",
+    );
+    const label = bar.querySelector<HTMLElement>(".label")!;
+    const html = document.documentElement;
+
+    const show = (index: number) => {
+      const v = variants[(index + variants.length) % variants.length];
+      html.dataset.variant = v.key;
+      label.textContent = `${v.key} (${v.name})`;
+      const url = new URL(location.href);
+      url.searchParams.set("variant", v.key);
+      history.replaceState(null, "", url);
+    };
+    const current = () =>
+      Math.max(
+        0,
+        variants.findIndex((v) => v.key === html.dataset.variant),
+      );
+
+    show(current());
+    bar.querySelectorAll<HTMLButtonElement>("[data-step]").forEach((b) =>
+      b.addEventListener("click", () => show(current() + Number(b.dataset.step))),
+    );
+    document.addEventListener("keydown", (e) => {
+      const t = e.target as HTMLElement;
+      if (t.closest("input, textarea, [contenteditable]")) return;
+      if (e.key === "ArrowLeft") show(current() - 1);
+      if (e.key === "ArrowRight") show(current() + 1);
+    });
+  }
+</script>
