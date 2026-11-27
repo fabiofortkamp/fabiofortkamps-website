@@ -84,6 +84,10 @@ Consult these guides before working on related tasks:
 
 Issues are tracked in GitHub Issues on `fabiofortkamp/fabiofortkamps-website`, using the `gh` CLI. See `docs/agents/issue-tracker.md`.
 
+### Triage labels
+
+Default vocabulary: each of the five triage roles uses a label of the same name. See `docs/agents/triage-labels.md`.
+
 ### Domain docs
 
 Single-context: one `GLOSSARY.md` and `docs/adr/` at the repo root. See `docs/agents/domain.md`.

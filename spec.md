@@ -27,8 +27,8 @@ Fabio's personal website and blog. Code structure and commands live in
 - Shared house rules live in the home repo's `CLAUDE.md`. `AGENTS.md` holds
   the repo-specific instructions, and `CLAUDE.md` imports it.
 - Engineering-skills config lives in `docs/agents/`: issues on GitHub
-  Issues, single-context domain docs (`GLOSSARY.md` and `docs/adr/`, created
-  when first needed).
+  Issues, default triage labels, single-context domain docs (`GLOSSARY.md`
+  and `docs/adr/`, created when first needed).
 
 ## Known gaps
 
@@ -46,3 +46,8 @@ Fabio's personal website and blog. Code structure and commands live in
 - 2026-11-27: Created this spec. Earlier history (the Astro tutorial
   build-out from 2026-06-23, the Tailwind/Catppuccin restyle on 2026-08-02,
   shared rules moved to the home repo on 2026-11-20) is in `git log`.
+- 2026-11-27: Added triage labels after `triage` was installed in the home
+  repo: `docs/agents/triage-labels.md` (default vocabulary) and an "Agent
+  skills" subsection in `AGENTS.md`. Created the `needs-triage`,
+  `needs-info`, `ready-for-agent` and `ready-for-human` labels on GitHub;
+  `wontfix` already existed.
