@@ -39,6 +39,14 @@ npm run preview
 
 This serves `dist/` at http://localhost:4321, as it will be deployed.
 
+## Test
+
+```sh
+npm test
+```
+
+Runs the Vitest unit tests once.
+
 ## Format
 
 ```sh

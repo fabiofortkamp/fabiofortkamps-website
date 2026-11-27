@@ -1,10 +1,31 @@
 ---
-
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/about/", label: "About" },
+  { href: "/blog/", label: "Blog" },
+  { href: "/tags/", label: "Tags" },
+];
+const withoutTrailingSlash = (path: string) => path.replace(/(.)\/$/, "$1");
+const current = withoutTrailingSlash(Astro.url.pathname);
 ---
 
-<div id="main-menu" class="nav-links">
-  <a href="/">Home</a>
-  <a href="/about/">About</a>
-  <a href="/blog/">Blog</a>
-  <a href="/tags/">Tags</a>
-</div>
+<nav id="main-menu" class="nav-links" aria-label="Main">
+  <ul>
+    {
+      links.map(({ href, label }) => (
+        <li>
+          <a
+            href={href}
+            class="mono-label text-muted no-underline hover:text-accent"
+            aria-current={
+              withoutTrailingSlash(href) === current ? "page" : undefined
+            }
+          >
+            {label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  <slot />
+</nav>

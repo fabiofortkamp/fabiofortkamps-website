@@ -2,23 +2,7 @@
 const { platform, username } = Astro.props;
 ---
 
-<a href={`https://www.${platform}.com/${username}`}>{platform}</a>
-
-<style>
-  a {
-    padding: 0.5rem 1rem;
-    color: var(--ctp-base);
-    background-color: var(--ctp-mauve);
-    text-decoration: none;
-    border-radius: 4px;
-    font-weight: bold;
-    transition: background-color 0.15s;
-  }
-
-  a:hover,
-  a:focus {
-    background-color: var(--ctp-lavender);
-    color: var(--ctp-base);
-    text-decoration: none;
-  }
-</style>
+<a
+  href={`https://www.${platform}.com/${username}`}
+  class="mono-label text-muted no-underline hover:text-accent">{platform}</a
+>
